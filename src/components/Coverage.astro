@@ -1,0 +1,47 @@
+---
+import { site } from '../data/site';
+import { cities, routes } from '../data/locations';
+---
+
+<section id="obszar" class="border-t border-white/10 py-16 md:py-24">
+  <div class="reveal-group mx-auto max-w-6xl px-4">
+    <p class="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-accent"><span class="rule-slash"></span>Gdzie dojedziemy</p>
+    <h2 class="text-3xl font-extrabold text-white md:text-4xl">Obszar działania — ok. {site.rangeKm} km od węzła Łask</h2>
+    <p class="mt-3 max-w-2xl text-neutral-400">
+      Bazujemy w {site.base}, dosłownie przy węźle Łask, gdzie <strong class="text-neutral-200">S8</strong>
+      łączy się z <strong class="text-neutral-200">S14</strong>. W zasięgu mamy też
+      <strong class="text-neutral-200"> A1</strong> i <strong class="text-neutral-200">A2</strong> z węzłem
+      Stryków. Dzięki temu naprawdę mamy krótkie czasy dojazdu — a nie tylko deklarujemy „jesteśmy przy trasie".
+    </p>
+
+    <div class="mt-10 grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+      <div class="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
+        {cities.map((c) => (
+          <a
+            href={`/${c.slug}`}
+            class="group flex items-center justify-between gap-3 bg-ink px-5 py-4 transition-colors duration-300 hover:bg-[#11150a]"
+          >
+            <span class="font-semibold text-neutral-100 transition-colors group-hover:text-accent">{c.name}</span>
+            <span class="text-xs text-neutral-500">{c.distanceKm} km · {c.driveMin}</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-black p-6">
+        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">Trasy ekspresowe</h3>
+        <ul class="mt-5 space-y-5">
+          {routes.map((r) => (
+            <li class="border-l-2 border-accent/40 pl-4">
+              <a href={`/${r.slug}`} class="font-bold text-accent hover:underline">{r.name}</a>
+              <p class="mt-1 text-xs leading-relaxed text-neutral-500">{r.points.slice(0, 5).join(' · ')}</p>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-6 border-t border-white/10 pt-5 text-xs leading-relaxed text-neutral-500">
+          Węzły i MOP-y w zasięgu: Łask, Róża, Dobroń, Złoczew, Sieradz Płd./Wsch., Stryków (A1/A2),
+          MOP Sięganów, MOP Paprotnia, MOP Dąbrowa Wielka, MOP Swędów.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,145 @@
+---
+import '../styles/global.css';
+import { site, legal } from '../data/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyCallBar from '../components/StickyCallBar.astro';
+import Fab from '../components/Fab.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  /** Dodatkowy blok JSON-LD (obiekt lub tablica) */
+  jsonLd?: unknown;
+}
+
+const { title, description, path = '', jsonLd } = Astro.props;
+const canonical = new URL(path, site.url).href;
+const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': ['AutoRepair', 'EmergencyService'],
+  '@id': `${site.url}/#business`,
+  name: site.name,
+  legalName: legal.entity,
+  taxID: legal.nip,
+  vatID: `PL${legal.nip}`,
+  image: `${site.url}/logo.png`,
+  logo: `${site.url}/logo.png`,
+  url: site.url,
+  telephone: site.phone,
+  email: site.email,
+  priceRange: '$$',
+  currenciesAccepted: 'PLN',
+  paymentAccepted: 'Gotówka, karta płatnicza, przelew',
+  slogan: 'Pomoc drogowa i mobilny mechanik przy węźle Łask S8/S14',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+  hasMap: 'https://www.google.com/maps/search/?api=1&query=Orch%C3%B3w+177%2C+98-100+%C5%81ask',
+  areaServed: {
+    '@type': 'GeoCircle',
+    geoMidpoint: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+    geoRadius: site.rangeKm * 1000,
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '00:00',
+    closes: '23:59',
+  },
+  ...(site.google.profileUrl ? { sameAs: [site.google.profileUrl] } : {}),
+};
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#060606" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:image" content={`${site.url}/logo.png`} />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class="bg-ink text-neutral-200 antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-accent focus:px-4 focus:py-2 focus:text-ink"
+    >
+      Przejdź do treści
+    </a>
+    <Header />
+    <main id="main" class="pb-20 md:pb-0">
+      <slot />
+    </main>
+    <Footer />
+    <StickyCallBar />
+    <Fab />
+
+    <script is:inline>
+      (function () {
+        var nodes = document.querySelectorAll('.reveal, .reveal-group');
+        if (!nodes.length) return;
+        var revealAll = function () {
+          nodes.forEach(function (n) { n.classList.add('in'); });
+        };
+        if (
+          !('IntersectionObserver' in window) ||
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+          revealAll();
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        );
+        nodes.forEach(function (n) { io.observe(n); });
+        // bezpiecznik – gdyby coś poszło nie tak, pokaż treść
+        setTimeout(revealAll, 2500);
+      })();
+    </script>
+  </body>
+</html>

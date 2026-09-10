@@ -1,0 +1,16 @@
+---
+interface Props { name: string; class?: string }
+const { name, class: cls = 'h-6 w-6' } = Astro.props;
+const paths: Record<string, string> = {
+  truck: 'M3 7h11v8H3zM14 10h4l3 3v2h-7M6.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm11 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z',
+  tow: 'M4 17h9M4 17a2 2 0 1 0 4 0M13 17a2 2 0 1 0 4 0M4 13l2-4h5l3 4M13 13h6l1-6-9 3M3 5l8 4',
+  wrench: 'M14.5 6a3.5 3.5 0 0 0-4.9 4.2l-6.3 6.3a2 2 0 1 0 2.8 2.8l6.3-6.3A3.5 3.5 0 0 0 18 8.5L15.5 11 13 8.5 15.5 6z',
+  battery: 'M4 8h13v8H4zM17 11h3v2h-3M8 6v2M13 6v2M7.5 12h3M9 10.5v3',
+  fuel: 'M5 20V6a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v14M4 20h11M14 9h2.5a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-2.5-2.5',
+  car: 'M5 13l1.5-4.5A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.9 1.5L19 13m-14 0h14v4H5zm2.5 4v1.5M16.5 17v1.5M7 13.5h.01M17 13.5h.01',
+};
+const d = paths[name] ?? paths.wrench;
+---
+<svg viewBox="0 0 24 24" class={cls} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <path d={d} />
+</svg>

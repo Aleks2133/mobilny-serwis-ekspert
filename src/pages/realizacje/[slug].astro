@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostArticle from '../../components/PostArticle.astro';
+import { site } from '../../data/site';
+import { posts } from '../../data/posts';
+
+export function getStaticPaths() {
+  return posts
+    .filter((p) => p.type === 'realizacja')
+    .map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  datePublished: post.date,
+  author: { '@type': 'Organization', name: site.name },
+  publisher: { '@type': 'Organization', name: site.name, logo: { '@type': 'ImageObject', url: `${site.url}/logo.png` } },
+};
+---
+
+<Layout title={post.title} description={post.excerpt} path={`/realizacje/${post.slug}`} jsonLd={jsonLd}>
+  <PostArticle post={post} backHref="/realizacje" backLabel="Wszystkie realizacje" />
+</Layout>

@@ -1,0 +1,56 @@
+---
+// Schematyczna mapa zasięgu — węzeł Łask (S8/S14) + miasta w regionie.
+const cities = [
+  { x: 210, y: 150, label: 'Łask' },
+  { x: 140, y: 96, label: 'Pabianice' },
+  { x: 168, y: 40, label: 'Łódź' },
+  { x: 120, y: 196, label: 'Zd. Wola' },
+  { x: 70, y: 236, label: 'Sieradz' },
+  { x: 250, y: 78, label: 'Łódź płd.' },
+  { x: 286, y: 210, label: 'Bełchatów' },
+  { x: 322, y: 150, label: 'Piotrków' },
+  { x: 40, y: 150, label: 'Wieluń' },
+];
+---
+
+<div class="relative rounded-2xl border border-white/10 bg-asphalt-800 p-5">
+  <p class="mb-3 text-xs font-bold uppercase tracking-wider text-neutral-400">
+    Zasięg ok. 100 km od bazy
+  </p>
+  <svg viewBox="0 0 360 280" class="w-full" role="img" aria-label="Mapa zasięgu: węzeł Łask S8/S14 i miasta w regionie">
+    <defs>
+      <radialGradient id="rg" cx="55%" cy="54%" r="55%">
+        <stop offset="0%" stop-color="#94d215" stop-opacity="0.16" />
+        <stop offset="100%" stop-color="#94d215" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <circle cx="198" cy="150" r="150" fill="url(#rg)" />
+    <circle cx="198" cy="150" r="150" fill="none" stroke="#94d215" stroke-opacity="0.25" stroke-dasharray="4 6" />
+
+    <!-- S8 -->
+    <path d="M8 232 L340 96" stroke="#3a4148" stroke-width="10" stroke-linecap="round" />
+    <path d="M8 232 L340 96" stroke="#5b636b" stroke-width="2" stroke-dasharray="10 12" />
+    <text x="300" y="104" fill="#8b949c" font-size="12" font-weight="700">S8</text>
+
+    <!-- S14 -->
+    <path d="M150 8 L150 272" stroke="#3a4148" stroke-width="10" stroke-linecap="round" />
+    <path d="M150 8 L150 272" stroke="#5b636b" stroke-width="2" stroke-dasharray="10 12" />
+    <text x="156" y="24" fill="#8b949c" font-size="12" font-weight="700">S14</text>
+
+    {cities.map((c) => (
+      <g>
+        <circle cx={c.x} cy={c.y} r="3.5" fill="#c9ced3" />
+        <text x={c.x + 7} y={c.y + 4} fill="#9aa1a8" font-size="11">{c.label}</text>
+      </g>
+    ))}
+
+    <!-- Węzeł Łask -->
+    <circle cx="198" cy="150" r="16" fill="#94d215" fill-opacity="0.18">
+      <animate attributeName="r" values="12;22;12" dur="2.4s" repeatCount="indefinite" />
+      <animate attributeName="fill-opacity" values="0.28;0;0.28" dur="2.4s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="198" cy="150" r="7" fill="#94d215" stroke="#060606" stroke-width="2" />
+    <text x="198" y="176" fill="#fff" font-size="12" font-weight="800" text-anchor="middle">Węzeł Łask</text>
+  </svg>
+</div>

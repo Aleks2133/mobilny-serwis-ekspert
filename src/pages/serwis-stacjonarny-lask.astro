@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Faq from '../components/Faq.astro';
+import { site, facility, services, faq } from '../data/site';
+
+const s = facility.stationary;
+const path = '/serwis-stacjonarny-lask';
+const description =
+  'Serwis samochodowy stacjonarny w Orchowie 177 pod Łaskiem, przy węźle S8/S14. Diagnostyka, drobne naprawy, przygotowanie auta po awarii na trasie. Umów wizytę telefonicznie.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Strona główna', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Serwis stacjonarny', item: new URL(path, site.url).href },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AutoRepair',
+    name: `${s.name} — ${site.name}`,
+    url: new URL(path, site.url).href,
+    telephone: site.phone,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.address.street,
+      addressLocality: site.address.locality,
+      postalCode: site.address.postalCode,
+      addressRegion: site.address.region,
+      addressCountry: 'PL',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+  },
+];
+---
+
+<Layout title="Serwis stacjonarny Łask (Orchów 177)" description={description} path={path} jsonLd={jsonLd}>
+  <section class="border-b border-white/10 py-14 md:py-20">
+    <div class="reveal-group mx-auto max-w-4xl px-4">
+      <nav class="text-xs text-neutral-500" aria-label="Ścieżka nawigacji">
+        <a href="/" class="hover:text-accent">Strona główna</a> / <span class="text-neutral-300">Serwis stacjonarny</span>
+      </nav>
+      <h1 class="mt-4 text-3xl font-extrabold text-white md:text-4xl">
+        Serwis stacjonarny <span class="text-accent">— Orchów 177, Łask</span>
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-neutral-300">{s.desc}</p>
+      <p class="mt-3 text-sm text-neutral-500">{s.address} · tuż przy węźle Łask (S8 / S14)</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a href={site.phoneHref} class="rounded-full bg-accent px-6 py-3 font-bold text-ink transition hover:bg-accent-600">
+          Umów wizytę: {site.phone}
+        </a>
+        <a href={s.mapUrl} class="rounded-full border border-white/25 px-6 py-3 font-semibold text-neutral-100 transition hover:border-accent hover:text-accent">
+          Pokaż na mapie
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-white/10 py-14 md:py-20">
+    <div class="reveal-group mx-auto max-w-4xl px-4">
+      <h2 class="text-2xl font-extrabold text-white md:text-3xl">Czym się zajmujemy w serwisie</h2>
+      <div class="mt-6 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
+        {services.map((sv) => (
+          <div class="group bg-ink p-6 transition-colors duration-300 hover:bg-[#11150a]">
+            <h3 class="font-bold text-white transition-colors group-hover:text-accent">{sv.title}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-neutral-400">{sv.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 class="mt-14 text-2xl font-extrabold text-white md:text-3xl">Dlaczego stacjonarnie pod Łaskiem</h2>
+      <div class="mt-5 space-y-4 leading-relaxed text-neutral-300">
+        <p>
+          Serwis mieści się w Orchowie 177, dosłownie przy zjeździe z węzła Łask. Jeśli auto złapało usterkę
+          na S8, S14, A1 lub A2, holujemy je prosto do nas — bez przetaczania po całym mieście.
+        </p>
+        <p>
+          Robimy diagnostykę komputerową, wymianę akumulatora, alternatora i rozrusznika, drobne naprawy
+          elektryki i układu paliwowego, wymianę i naprawę kół. Większe naprawy blacharsko-lakiernicze
+          kierujemy do sprawdzonych warsztatów partnerskich.
+        </p>
+        <p>
+          Na czas naprawy pojazd stoi bezpiecznie na naszym{' '}
+          <a href="/parking-tir-lask" class="text-accent hover:underline">strzeżonym, oświetlonym placu</a> —
+          dotyczy to też ciężarówek i zestawów. Dla kierowców czekających na miejscu są toaleta i prysznic.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Faq items={[...faq]} heading="Pytania — serwis stacjonarny" />
+</Layout>

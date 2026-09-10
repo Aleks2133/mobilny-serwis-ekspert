@@ -1,0 +1,324 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Coverage from '../components/Coverage.astro';
+import ServiceIcon from '../components/ServiceIcon.astro';
+import AmenityIcon from '../components/AmenityIcon.astro';
+import Faq from '../components/Faq.astro';
+import { site, services, steps, faq, facility } from '../data/site';
+import { posts, fmtDate } from '../data/posts';
+
+const realizacje = posts.filter((p) => p.type === 'realizacja').slice(0, 3);
+
+const pageTitle = 'Pomoc drogowa Łask, S8 / S14 / A1 / A2 — 24/7';
+const description =
+  `Pomoc drogowa 24/7 i mobilny mechanik przy węźle Łask (S8/S14). Holowanie, naprawa na miejscu, odpalanie auta, dowóz paliwa. Serwis stacjonarny i strzeżony parking dla TIR-ów. Zasięg ok. ${site.rangeKm} km — do węzła Stryków (A1/A2). Zadzwoń: ${site.phone}.`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: site.url,
+    inLanguage: 'pl-PL',
+  },
+];
+---
+
+<Layout title={pageTitle} description={description} path="/" jsonLd={jsonLd}>
+  <!-- HERO -->
+  <section class="relative isolate -mt-[124px] flex min-h-[88svh] items-center justify-center overflow-hidden border-b border-white/10">
+    <picture class="absolute inset-0 -z-10">
+      <source srcset="/hero.webp" type="image/webp" />
+      <img src="/hero.jpg" alt="Mobilny mechanik wymienia koło" class="h-full w-full object-cover object-center" />
+    </picture>
+    <!-- Przyciemnienie dla czytelności -->
+    <div class="absolute inset-0 -z-10 bg-ink/70"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-ink/80 via-transparent to-ink"></div>
+
+    <div class="hero-in mx-auto flex w-full max-w-3xl flex-col items-center px-4 pb-14 pt-28 text-center">
+      <h1 class="text-4xl font-extrabold leading-tight text-white drop-shadow-lg md:text-[3.4rem]">
+        Pomoc drogowa i mobilny mechanik
+        <span class="text-accent"> przy węźle Łask S8/S14</span>
+      </h1>
+      <p class="mt-5 max-w-xl text-base text-neutral-200 drop-shadow md:text-lg">
+        Zepsute auto na trasie albo pod domem? Dojeżdżamy w promieniu ok. {site.rangeKm} km —
+        Łask, Zduńska Wola, Sieradz, Pabianice, Łódź, Bełchatów, aż po węzeł Stryków (A1/A2).
+        Naprawa na miejscu, holowanie, serwis stacjonarny i strzeżony parking.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <a
+          href={site.phoneHref}
+          class="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-bold text-ink transition hover:bg-accent-600"
+        >
+          Zadzwoń: {site.phone}
+        </a>
+        <a
+          href={`https://wa.me/${site.whatsapp}`}
+          class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-ink/30 px-7 py-3.5 text-base font-semibold text-neutral-100 backdrop-blur transition hover:border-accent hover:text-accent"
+        >
+          Napisz na WhatsApp
+        </a>
+      </div>
+      <p class="mt-5 text-sm text-neutral-400">
+        Nie możesz mówić (hałas, stres, tranzyt)? Wyślij lokalizację SMS-em lub przez WhatsApp.
+      </p>
+    </div>
+  </section>
+
+  <!-- PASEK ZAUFANIA -->
+  <section class="relative z-10 -mt-12 px-4 md:-mt-16">
+    <div
+      class="mx-auto grid max-w-5xl grid-cols-2 gap-6 rounded-3xl border border-white/10 bg-black px-6 py-10 shadow-2xl md:grid-cols-4 md:px-10"
+    >
+      <div class="text-center">
+        <p class="stat text-3xl font-extrabold text-accent md:text-4xl" data-to="120" data-prefix="~" data-suffix=" km">~0 km</p>
+        <p class="mt-1 text-xs text-neutral-400">Zasięg od węzła Łask</p>
+      </div>
+      <div class="text-center">
+        <p class="text-3xl font-extrabold text-accent md:text-4xl">24/7</p>
+        <p class="mt-1 text-xs text-neutral-400">Dyżur telefoniczny</p>
+      </div>
+      <div class="text-center">
+        <p class="stat text-3xl font-extrabold text-accent md:text-4xl" data-to="6" data-suffix="">0</p>
+        <p class="mt-1 text-xs text-neutral-400">Usług w ofercie</p>
+      </div>
+      <div class="text-center">
+        <p class="stat text-3xl font-extrabold text-accent md:text-4xl" data-to="10" data-suffix="+">0+</p>
+        <p class="mt-1 text-xs text-neutral-400">Miast w stałym zasięgu</p>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var els = document.querySelectorAll('.stat');
+      if (!els.length) return;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function run(el) {
+        var to = parseInt(el.dataset.to, 10) || 0;
+        var pre = el.dataset.prefix || '';
+        var suf = el.dataset.suffix || '';
+        if (reduce) { el.textContent = pre + to + suf; return; }
+        var start = performance.now(), dur = 1200;
+        function tick(now) {
+          var p = Math.min((now - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = pre + Math.round(to * eased) + suf;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { run(e.target); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.4 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+
+  <!-- USŁUGI -->
+  <section id="uslugi" class="py-16 md:py-24">
+    <div class="reveal-group mx-auto max-w-6xl px-4">
+      <p class="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-accent"><span class="rule-slash"></span>Usługi</p>
+      <h2 class="text-3xl font-extrabold text-white md:text-4xl">Co robimy</h2>
+      <div class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s) => (
+          <div class="group relative bg-ink p-7 transition-colors duration-300 hover:bg-[#11150a]">
+            <span class="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 bg-accent transition-transform duration-300 group-hover:scale-y-100"></span>
+            <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-accent/40 text-accent transition-colors duration-300 group-hover:bg-accent group-hover:text-ink">
+              <ServiceIcon name={s.icon} />
+            </div>
+            <h3 class="mt-5 text-lg font-bold text-white">{s.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-400">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- JAK TO DZIAŁA -->
+  <section class="border-t border-white/10 bg-black py-16 md:py-24">
+    <div class="reveal-group mx-auto max-w-6xl px-4">
+      <p class="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-accent"><span class="rule-slash"></span>Proces</p>
+      <h2 class="text-3xl font-extrabold text-white md:text-4xl">Jak to działa</h2>
+
+      <ol class="relative mt-12 grid gap-8 md:grid-cols-5 md:gap-x-6">
+        <span
+          aria-hidden="true"
+          class="absolute bottom-3 left-[19px] top-3 w-px bg-gradient-to-b from-accent/0 via-accent/40 to-accent/0 md:inset-x-0 md:bottom-auto md:left-0 md:top-[19px] md:h-px md:w-full md:bg-gradient-to-r"
+        ></span>
+        {steps.map((st) => (
+          <li class="relative flex gap-4 md:block">
+            <span
+              class="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-extrabold text-black ring-4 ring-black"
+            >
+              {st.n}
+            </span>
+            <div class="md:mt-5">
+              <h3 class="font-bold text-white">{st.title}</h3>
+              <p class="mt-1 text-sm leading-relaxed text-neutral-400">{st.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <Coverage />
+
+  <!-- BAZA: SERWIS + PARKING -->
+  <section id="baza" class="border-t border-white/10 bg-black py-16 md:py-24">
+    <div class="reveal-group mx-auto max-w-6xl px-4">
+      <p class="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-accent"><span class="rule-slash"></span>Nasza baza</p>
+      <h2 class="text-3xl font-extrabold text-white md:text-4xl">Serwis stacjonarny i parking dla TIR-ów w Orchowie</h2>
+      <p class="mt-3 max-w-2xl text-neutral-400">
+        Przy samym węźle Łask (S8/S14) mamy stałe zaplecze: warsztat do umówionych napraw
+        oraz duży, strzeżony i oświetlony plac. {facility.stationary.address}.
+      </p>
+
+      <ul class="mt-8 flex flex-wrap gap-3">
+        {facility.parking.amenities.map((a) => (
+          <li class="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-neutral-200">
+            <AmenityIcon name={a.icon} class="h-4 w-4 text-accent" /> {a.label}
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
+        <a href="/serwis-stacjonarny-lask" class="group relative overflow-hidden rounded-2xl border border-white/10 p-6 transition-colors duration-300 hover:border-accent/50 hover:bg-[#11150a]">
+          <span class="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 bg-accent transition-transform duration-300 group-hover:scale-y-100"></span>
+          <h3 class="text-lg font-bold text-white transition-colors group-hover:text-accent">Serwis stacjonarny Łask</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">
+            Diagnostyka, drobne naprawy, przygotowanie auta po awarii na trasie. Wizyty po umówieniu telefonicznym.
+          </p>
+          <span class="mt-4 inline-block text-sm font-semibold text-accent">Zobacz szczegóły →</span>
+        </a>
+        <a href="/parking-tir-lask" class="group relative overflow-hidden rounded-2xl border border-white/10 p-6 transition-colors duration-300 hover:border-accent/50 hover:bg-[#11150a]">
+          <span class="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 bg-accent transition-transform duration-300 group-hover:scale-y-100"></span>
+          <h3 class="text-lg font-bold text-white transition-colors group-hover:text-accent">Parking dla TIR-ów</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">
+            Strzeżony, oświetlony, monitorowany plac dla ciężarówek i zestawów. Toalety i prysznic dla kierowców.
+          </p>
+          <span class="mt-4 inline-block text-sm font-semibold text-accent">Zobacz szczegóły →</span>
+        </a>
+      </div>
+
+      <div class="mt-8">
+        <a href={site.phoneHref} class="inline-flex rounded-full bg-accent px-6 py-3 font-bold text-ink transition hover:bg-accent-600">
+          Zadzwoń i umów: {site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- REALIZACJE -->
+  <section id="realizacje" class="border-t border-white/10 bg-black py-16 md:py-24">
+    <div class="reveal-group mx-auto max-w-6xl px-4">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p class="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-accent"><span class="rule-slash"></span>Z trasy</p>
+          <h2 class="text-3xl font-extrabold text-white md:text-4xl">Ostatnie realizacje</h2>
+        </div>
+        <a href="/realizacje" class="group shrink-0 text-sm font-semibold text-accent">
+          Zobacz wszystkie <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+      <div class="mt-10 grid gap-4 md:grid-cols-3">
+        {realizacje.map((p) => (
+          <a
+            href={`/realizacje/${p.slug}`}
+            class="group relative overflow-hidden rounded-2xl border border-white/10 p-6 transition-colors duration-300 hover:border-accent/50 hover:bg-[#11150a]"
+          >
+            <span class="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 bg-accent transition-transform duration-300 group-hover:scale-y-100"></span>
+            <p class="text-xs font-bold uppercase tracking-wider text-accent">{p.location}</p>
+            <h3 class="mt-3 text-lg font-bold text-white transition-colors group-hover:text-accent">{p.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-400">{p.excerpt}</p>
+            <p class="mt-4 text-xs text-neutral-500">{fmtDate(p.date)}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- OPINIE -->
+  <section class="border-t border-white/10 py-16 md:py-24">
+    <div class="reveal-group mx-auto max-w-6xl px-4">
+      <p class="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-accent"><span class="rule-slash"></span>Zaufanie</p>
+      <h2 class="text-3xl font-extrabold text-white md:text-4xl">Opinie klientów</h2>
+      <p class="mt-3 max-w-2xl text-neutral-400">
+        Zbieramy opinie po każdym zleceniu — prosto do wizytówki Google. Prawdziwe wypowiedzi
+        klientów pojawią się tutaj wraz z oceną.
+      </p>
+      <div class="mt-8 flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-black px-6 py-10 text-center">
+        <div class="flex gap-1 text-accent">
+          {Array.from({ length: 5 }).map(() => (
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true"><path d="m12 2 3 6.5 7 .9-5 4.9 1.2 7L12 18l-6.4 3.3L6.8 14 2 9.4l7-.9L12 2z"/></svg>
+          ))}
+        </div>
+        <p class="text-sm text-neutral-400">
+          {site.google.reviews > 0
+            ? `Ocena ${site.google.rating} / 5 — ${site.google.reviews} opinii w Google`
+            : 'Zbieramy pierwsze opinie — Twoja może być tu następna.'}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Faq />
+
+  <!-- FINALNE CTA -->
+  <section id="kontakt" class="border-t border-white/10 bg-black py-20 md:py-28">
+    <div class="reveal-group mx-auto max-w-3xl px-4 text-center">
+      <p class="mb-3 flex items-center justify-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-accent"><span class="rule-slash"></span>Kontakt</p>
+      <h2 class="text-3xl font-extrabold text-white md:text-4xl">Potrzebujesz pomocy teraz?</h2>
+      <p class="mt-4 text-neutral-300">
+        Zadzwoń — odbieramy o każdej porze. Podaj lokalizację i opis usterki, resztą zajmiemy się my.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <a href={site.phoneHref} class="rounded-full bg-accent px-8 py-4 text-lg font-bold text-ink transition hover:bg-accent-600">
+          {site.phone}
+        </a>
+        <a href={`https://wa.me/${site.whatsapp}`} class="rounded-full border border-white/25 px-8 py-4 text-lg font-semibold text-neutral-100 transition hover:border-accent hover:text-accent">
+          WhatsApp / SMS
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-in > * {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: hero-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .hero-in > *:nth-child(1) { animation-delay: 0.08s; }
+  .hero-in > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-in > *:nth-child(3) { animation-delay: 0.32s; }
+  .hero-in > *:nth-child(4) { animation-delay: 0.44s; }
+
+  @keyframes hero-rise {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-in > * {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site, legal } from '../data/site';
+
+const path = '/polityka-prywatnosci';
+const updated = new Date(legal.privacyUpdated).toLocaleDateString('pl-PL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<Layout
+  title="Polityka prywatności"
+  description="Informacja o przetwarzaniu danych osobowych (RODO) w serwisie Mobilny Serwis Ekspert oraz zasady korzystania z plików cookies."
+  path={path}
+>
+  <section class="py-14 md:py-20">
+    <div class="mx-auto max-w-3xl px-4">
+      <nav class="text-xs text-neutral-500" aria-label="Ścieżka nawigacji">
+        <a href="/" class="hover:text-accent">Strona główna</a> / <span class="text-neutral-300">Polityka prywatności</span>
+      </nav>
+      <h1 class="mt-4 text-3xl font-extrabold text-white md:text-4xl">Polityka prywatności</h1>
+      <p class="mt-3 text-sm text-neutral-500">Ostatnia aktualizacja: {updated}</p>
+
+      <div class="prose-legal mt-8 space-y-8 text-neutral-300">
+        <div>
+          <h2 class="text-xl font-bold text-white">1. Administrator danych</h2>
+          <p class="mt-2 leading-relaxed">
+            Administratorem Twoich danych osobowych jest {legal.entityFull} ({legal.entity}) z siedzibą pod adresem
+            {' '}{legal.registeredAddress}, wpisana do rejestru przedsiębiorców KRS pod numerem {legal.krs}
+            {' '}({legal.court}), NIP {legal.nip}, REGON {legal.regon}, kapitał zakładowy {legal.shareCapital}
+            {' '}(dalej: „Administrator"). Działalność operacyjna (baza, serwis, parking):
+            {' '}{site.address.street}, {site.address.postalCode} {site.address.locality}.
+          </p>
+          <p class="mt-2 leading-relaxed">
+            Kontakt w sprawie danych:
+            {' '}<a href={`mailto:${site.email}`} class="text-accent hover:underline">{site.email}</a>,
+            tel. <a href={site.phoneHref} class="text-accent hover:underline">{site.phone}</a>.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-white">2. Zakres i cele przetwarzania</h2>
+          <p class="mt-2 leading-relaxed">Przetwarzamy dane, które przekazujesz nam dobrowolnie, w następujących celach:</p>
+          <ul class="mt-3 list-disc space-y-2 pl-5 leading-relaxed">
+            <li>
+              <strong class="text-white">Realizacja zgłoszenia i usługi</strong> (kontakt telefoniczny, SMS, WhatsApp,
+              e-mail, ustalenie lokalizacji zdarzenia, wykonanie pomocy drogowej, holowania lub naprawy) — podstawa:
+              art. 6 ust. 1 lit. b RODO (wykonanie umowy) oraz lit. f (prawnie uzasadniony interes).
+            </li>
+            <li>
+              <strong class="text-white">Rozliczenie i obowiązki podatkowe</strong> (wystawienie paragonu lub faktury,
+              dokumentacja szkody z OC sprawcy) — podstawa: art. 6 ust. 1 lit. c RODO (obowiązek prawny).
+            </li>
+            <li>
+              <strong class="text-white">Obsługa reklamacji i ewentualne dochodzenie roszczeń</strong> — podstawa:
+              art. 6 ust. 1 lit. f RODO.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-white">3. Odbiorcy danych</h2>
+          <p class="mt-2 leading-relaxed">
+            Dane mogą być przekazywane podmiotom wspierającym nas w działalności: biuru rachunkowemu, dostawcy
+            hostingu i poczty, firmom kurierskim, warsztatom partnerskim (gdy holujemy do nich pojazd), a w razie
+            szkody komunikacyjnej — zakładom ubezpieczeń. Nie sprzedajemy danych i nie przekazujemy ich poza
+            Europejski Obszar Gospodarczy bez odpowiednich zabezpieczeń.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-white">4. Okres przechowywania</h2>
+          <p class="mt-2 leading-relaxed">
+            Dane związane z usługą i rozliczeniem przechowujemy przez okres wymagany przepisami podatkowymi
+            (co do zasady 5 lat od końca roku, w którym wykonano usługę). Dane kontaktowe z zapytań, które nie
+            zakończyły się zleceniem, usuwamy po zakończeniu korespondencji, najpóźniej po 12 miesiącach.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-white">5. Twoje prawa</h2>
+          <p class="mt-2 leading-relaxed">
+            Masz prawo do: dostępu do danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia,
+            wniesienia sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie oraz wniesienia
+            skargi do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa). Podanie danych jest
+            dobrowolne, ale niezbędne do wykonania usługi.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-white">6. Pliki cookies</h2>
+          <p class="mt-2 leading-relaxed">
+            Strona w podstawowej wersji nie stosuje plików cookies do celów marketingowych ani analitycznych
+            i nie profiluje użytkowników. Wykorzystujemy jedynie pamięć przeglądarki do drobnych ustawień
+            interfejsu (np. zapamiętanie rozwiniętej sekcji). Jeśli w przyszłości wdrożymy narzędzia analityczne
+            (np. Google Analytics), przed ich uruchomieniem poprosimy o zgodę, a niniejsza polityka zostanie
+            zaktualizowana.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-white">7. Zmiany polityki</h2>
+          <p class="mt-2 leading-relaxed">
+            Politykę możemy aktualizować w związku ze zmianą przepisów lub zakresu usług. Aktualna wersja jest
+            zawsze dostępna pod tym adresem, z datą ostatniej aktualizacji na górze strony.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
